@@ -1,0 +1,151 @@
+Help on package mass_production:
+
+NAME
+    mass_production
+
+PACKAGE CONTENTS
+    conveyor
+    tests (package)
+
+CLASSES
+    class Conveyor(builtins.object)
+     |  This class can be used to call a function (for example a factory-boy
+     |  Factory's `create`) multiple times using a series sets of of kwargs that
+     |  are generated according to the rules specified using the Conveyor's
+     |  self-returning methods:
+     |  
+     |  Example:
+     |      (Conveyor.call(lambda **kwargs: print(kwargs))
+     |      .using(a=1, b=2)
+     |      .cycling(fruit=['apple', 'banana'], color=['red', 'yellow'],
+     |               index=itertools.count(1))
+     |      .of_size(5))
+     |  
+     |      # outputs (when of_size(5) is called)
+     |      {'a': 1, 'b': 2, 'fruit': 'apple', 'color': 'red', 'index': 1}
+     |      {'a': 1, 'b': 2, 'fruit': 'banana', 'color': 'yellow', 'index': 2}
+     |      {'a': 1, 'b': 2, 'fruit': 'apple', 'color': 'red', 'index': 3}
+     |      {'a': 1, 'b': 2, 'fruit': 'banana', 'color': 'yellow', 'index': 4}
+     |      {'a': 1, 'b': 2, 'fruit': 'apple', 'color': 'red', 'index': 5}
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, func)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  cycling(self, **kwargs_seqs)
+     |      Set up the builder to cycle through the generators and/or lists passed
+     |      for every function call. Returns self to make calls chainable.
+     |      
+     |      Example:
+     |          (Conveyor.create_batch_from(Factory)
+     |          .cycling(x=[1, 2, 3], y='ab')
+     |          .of_size(10))
+     |      
+     |          # -> Factory.create will be called with the following kwargs:
+     |      
+     |          [{'x': 1, 'y': 'a'},
+     |           {'x': 2, 'y': 'b'},
+     |           {'x': 3, 'y': 'a'},
+     |           {'x': 1, 'y': 'b'},
+     |           {'x': 2, 'y': 'a'},
+     |           {'x': 3, 'y': 'b'},
+     |           {'x': 1, 'y': 'a'}]  # sequence restarts after 6 iterations!
+     |  
+     |  for_each(self, **kwargs_seqs)
+     |      Call the function specified earlier in the chain with the given kwargs
+     |      for every element in the kwargs passed here (kwargs must have lengths
+     |      here.)
+     |      
+     |      Example:
+     |          (Conveyor.create_batch_from(Factory)
+     |          .using(name='Alice')
+     |          .for_each(where=['In Wonderland', 'In Chains']))
+     |      
+     |          # -> Factory.create will be called with the following kwargs:
+     |      
+     |          [{'name': 'Alice', 'where': 'In Wonderland'},
+     |           {'name': 'Alice', 'where': 'In Chains'},]
+     |  
+     |  from_table(self, header, rows)
+     |      Call the function specified earlier in the chain with the kwargs
+     |      specified by the header and values specified by the rows.
+     |      
+     |      Example:
+     |      (Conveyor.create_batch_from(PersonFactory)
+     |       .using(alive=True)
+     |       .from_table(('age', 'hair_color', 'job'),
+     |                   [(36, 'blond', 'Developer'),
+     |                    (18, 'brown', 'Student'),
+     |                    (5, 'black', None),
+     |                    (72, 'grey', 'Pensioner'),])
+     |      
+     |          # -> Factory.create will be called with the following kwargs:
+     |      
+     |          {'age': 36, 'hair_color': 'blond',
+     |           'job': 'Developer', 'alive': True},
+     |          {'age': 18, 'hair_color': 'brown',
+     |           'job': 'Student', 'alive': True},
+     |          {'age': 5, 'hair_color': 'black',
+     |           'job': None, 'alive': True},
+     |          {'age': 72, 'hair_color': 'grey',
+     |           'job': 'Pensioner', 'alive': True},)
+     |  
+     |  generate_kwargs(self)
+     |      Return a generator that returns the kwargs the function should be
+     |      called with as a dict.
+     |  
+     |  of_size(self, n)
+     |      Call the function specified earlier in the chain with the given kwargs
+     |      n times.
+     |  
+     |  permutating(self, **bases)
+     |      Set up the Conveyor to cycle through the product of the given
+     |      iterators/lists passed as kwargs.  Returns self to make calls
+     |      chainable.
+     |      
+     |      Example:
+     |          (Conveyor.create_batch_from(Factory)
+     |          .permutating(x=[1, 2, 3], y='abc')
+     |          .of_size(10))
+     |      
+     |          # -> Factory.create will be called with the following kwargs:
+     |      
+     |          [{'x': 1, 'y': 'a'},
+     |           {'x': 2, 'y': 'a'},
+     |           {'x': 3, 'y': 'a'},
+     |           {'x': 1, 'y': 'b'},
+     |           {'x': 2, 'y': 'b'},
+     |           {'x': 3, 'y': 'b'},
+     |           {'x': 1, 'y': 'c'},
+     |           {'x': 2, 'y': 'c'},
+     |           {'x': 3, 'y': 'c'},
+     |           {'x': 1, 'y': 'a'}]  # sequence restarts after 3*3 iterations!
+     |      
+     |      Note:
+     |          We use `itertools.product` to generate these permutations, which
+     |          means that the order that `product` generates is the one that is
+     |          generated by the iterator added to this instance by this method.
+     |      
+     |          As the ordering of kwargs is not guaranteed in python<3.6, we sort
+     |          the kwargs to be able to guarantee that ordering doesn't change
+     |          when called with the same arguments, but no such guarantee can be
+     |          made when the keyword parameters are changed (so the order of
+     |          permutations might change when some keywords are changed.)
+     |  
+     |  using(self, **kwargs)
+     |      Set up the builder to use the given kwargs for every call. Returns self
+     |      to make calls chainable.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  call(func) from builtins.type
+     |      Set up builder to call the given function.
+     |  
+     |  create_batch_from(factory_class) from builtins.type
+     |      Set up builder to call the passed factory's create method.
+     |  
+     |  ----------------------------------------------------------------------
+
+

@@ -1,0 +1,113 @@
+
+
+
+## OSX things
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## Misc
+
+# Thumbnails
+._*
+
+# (Linux) temp files
+*~
+
+## PyCharm things
+*.iml
+.idea/
+*.ipr
+*.iws
+
+## Sublime Text project files
+*.sublime-*
+
+## VSCode
+.vscode/
+
+## misc editors
+.editorconfig
+
+
+## Python
+
+# bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.python-version
+
+## Deployment
+.vagrant
+*.retry
+.vault_password.txt
+
+## Project
+
+# Virtualenvs
+/fabricenv
+/env/
+/venv/
+/.fab/
+
+# npm
+/node_modules/
+
+# Testing & reports
+htmlcov/
+reports/
+.coverage
+.pytest_cache/*
+
+# Logs
+/logs/
+
+# Documentation
+/docs/_build/
+
+# Geo databases
+/geodb/
+
+# Static/media files
+/static/css/
+/static/js/main_v2.js*
+/staticfiles/
+/media_files/
+
+# v2 js bundle
+static/js/main_v2.js
+static/js/main_v2.js.map
+static/js/influencer_v2.js
+static/js/influencer_v2.js.map
+
+# Don't ignore lib folders in js folder
+!static/js/v2/**/lib
+
+# Google Data API secrets
+client_secrets.json
+client_secrets_influencers.json
+google_data_api.dat
+
+# Local settings overrides (to be phased out, use .env instead)
+imadb/settings/_local.py
+/.env
+
+# debug helper for ppt exports
+export/tests/_debug.py
