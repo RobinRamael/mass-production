@@ -22,9 +22,6 @@ class ConveyorTests(TestCase):
                   .of_size(10))
 
         # -> Factory.create will be called with the following kwargs:
-
-        print(kwargs)
-
         expected = [{'x': 1, 'y': 'a'},
                     {'x': 2, 'y': 'a'},
                     {'x': 3, 'y': 'a'},
