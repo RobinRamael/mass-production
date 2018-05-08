@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mass-production',
-      version='1.0.2',
+      version='1.1.0',
       description="Call a function (e.g a factory-boy Factory's create method) "
                   "according to a defined pattern.",
       url='http://github.com/RobinRamael/mass-production',
