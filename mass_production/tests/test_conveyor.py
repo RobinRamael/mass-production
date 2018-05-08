@@ -4,6 +4,11 @@ import six
 
 from mass_production import Conveyor
 
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
+
 
 def f(**kwargs):
     return kwargs
@@ -37,12 +42,18 @@ class ConveyorTests(TestCase):
 
         six.assertCountEqual(self, expected, kwargs)
 
-    def test_of_float_size(self):
+    def test_of_convertable_float_size(self):
         kwargs = (Conveyor(f)
                   .using(x=1)
                   .of_size(10.0))
 
         self.assertEqual(kwargs, [{'x': 1}] * 10)
+
+    def test_of_unconvertable_float_size(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(f)
+             .using(x=1)
+             .of_size(10.5))
 
     def test_cycling(self):
         kwargs = (Conveyor(f)
@@ -112,3 +123,42 @@ class ConveyorTests(TestCase):
         kwargs = Conveyor.call(f).of_size(3)
 
         self.assertEqual(kwargs, [{}, {}, {}])
+
+    def test_no_function_specified(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(None).of_size(2))
+
+    def test_no_callable_specified(self):
+        with self.assertRaises(ValueError):
+            (Conveyor('This is not a callable').of_size(2))
+
+    def test_empty_for_each(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(f).for_each())
+
+    def test_for_each_lenghts_not_equal(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(f).for_each(x=[1, 2], y=[1, 2, 3]))
+
+    def test_table_header_length_doesnt_match_rows(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(f).from_table(
+                ['one', 'two'],
+                [[1, 2, 3],
+                 [1, 2, 3],
+                 [1, 2, 3]]))
+
+    def test_table_rows_not_all_same_lenghts(self):
+        with self.assertRaises(ValueError):
+            (Conveyor(f).from_table(
+                ['one', 'two', 'three'],
+                [[1, 2, 3],
+                 [1, 2, 3],
+                 [1, 2, 3, 4]]))
+
+    def test_create_batch_from_called(self):
+        # We don't need an actual factory to test if the create is called.
+        mock_factory = MagicMock()
+        (Conveyor.create_batch_from(mock_factory).using(x=1).of_size(1))
+
+        mock_factory.create.assert_called_once_with(x=1)
