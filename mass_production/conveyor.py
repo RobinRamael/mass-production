@@ -2,6 +2,8 @@ from collections import OrderedDict
 from functools import reduce
 from itertools import cycle, islice, product, repeat
 
+from six.moves import zip
+
 
 def merged(*ds):
     """Merge all given dictionaries"""
