@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+import six
+
 from mass_production import Conveyor
 
 
@@ -33,7 +35,7 @@ class ConveyorTests(TestCase):
                     {'x': 3, 'y': 'c'},
                     {'x': 1, 'y': 'a'}]  # sequence restarts after 9 iterations
 
-        self.assertCountEqual(kwargs, expected)
+        six.assertCountEqual(self, expected, kwargs)
 
     def test_of_float_size(self):
         kwargs = (Conveyor(f)

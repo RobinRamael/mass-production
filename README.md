@@ -4,6 +4,8 @@ The Conveyor class enables calling a single function a specified number of
 times with keyword arguments that change according to a pattern specified by
 chaining method calls.
 
+Supports python 2.7+ and python 3.3+
+
 
 ## Example
 
