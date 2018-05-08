@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/RobinRamael/mass-production.svg?branch=master)](https://travis-ci.com/RobinRamael/mass-production)
+
+
 # Mass Production with Conveyor
 
 The Conveyor class enables calling a single function a specified number of
